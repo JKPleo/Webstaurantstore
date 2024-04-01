@@ -13,7 +13,7 @@ import webstaurantstore.Utilities.AbstractComponent;
 public class LandingPage extends AbstractComponent{
 	
 	WebDriver driver;
-	
+	//Constructor
 	public LandingPage(WebDriver driver)
 	{
 		super(driver);
@@ -23,6 +23,7 @@ public class LandingPage extends AbstractComponent{
 			
 	}
 	
+	//Creating web elements
 	@FindBy(xpath="//*[@data-testid='logo'][@aria-label='Homepage, WebstaurantStore']")
 	 WebElement Logo;
 	
@@ -53,41 +54,40 @@ public class LandingPage extends AbstractComponent{
 	@FindBy(xpath="//a[@data-testid='cart-button']")
 	 WebElement MainViewCart;
 		
-	
+	//variables
 	public int productListSize; 
 	public List<String> productnames = new ArrayList<>();
-	public String productTitle;
-	
+	public String productTitle;	
 	public  String getproductTitle()
-	{
-		return productTitle;		
-	}
-	
+	{return productTitle;}
 	public void setproductTitle(String ProductTitle)
-	{
-		productTitle = ProductTitle;
-	}
+	{productTitle = ProductTitle;}
+	public static final String ANSI_RESET = "\u001B[0m"; 
+	public static final String ANSI_YELLOW = "\u001B[33m";  
+	public static final String ANSI_RED = "\u001B[41m"; 
 	
 	
-	 
+	 //Sub methods
+	
+	//Method to launch application
 	public void LaunchAPP() {
 		driver.get("https://www.webstaurantstore.com/");
 		customWait(Logo);
 		try
 		{	
-			System.out.println("Webstaurants Application launched successfully");
+			System.out.println("Step 1: Webstaurants Application launched successfully \n");
 		}catch(Exception e) {
-			System.out.println("Webstaurants Application launche Failed:" + e);
+			System.out.println("Step 1: Webstaurants Application launche Failed:\n" + e);
 		}
 	}
-	
+	//Method to search items on the landing screen
 	public void mastersearch(String searchVal) {
 		searchTextBox.sendKeys(searchVal);
 		magnifyingGlass.click();
 		customWait(Logo);
-		System.out.println("Search for \"Stainless Work Table\" step is successfull");
+		System.out.println("Step 2: Search for \"Stainless Work Table\" step is successfull \n");
 	}
-	
+	//Method to get page count after the search performed
 	public int pagecount() {
 		int NoOfPages=1;
 		try {
@@ -97,7 +97,7 @@ public class LandingPage extends AbstractComponent{
 		}
 		return NoOfPages;
 	}
-	
+	//Method to check the table title in all search results
 	public boolean checkTitleforTable(int noofpages)
 	{
 		int temp=0;
@@ -123,20 +123,18 @@ public class LandingPage extends AbstractComponent{
 				temp++;
 			}else {
 				break;
-			}
-			
-		}while(noofpages>=temp);
-		
-		
+			}			
+		}while(noofpages>=temp);		
 		//checking for items NOT having Table in the title					
 		if(!Tableflag){
-			System.out.println("\"Check the search results ensuring every products has 'Table' in its title\" step is successfull");
+			System.out.println("Step 3: \"Check the search results ensuring every products has 'Table' in its title\" step is successfull \n");
 		}else {
-			System.out.println("\"Check the search results ensuring every products has 'Table' in its title\" step is FAILED");
+			System.out.println("Step 3: \"Check the search results ensuring every products has 'Table' in its title\" step is "+ANSI_RED + "FAILED \n" + ANSI_RESET);
 		}
 		return Tableflag;
 	}
-	
+	//Method to add the last item to the card
+	//if last item is not having "add to cart" button (for example, items with Request to Quote button) it will check the previous item and add it to the cart
 	public void addToCart() {
 		ListIterator revItr = productnames.listIterator(productnames.size());
 		
@@ -145,25 +143,25 @@ public class LandingPage extends AbstractComponent{
 			try {
 				String AddtoCartXpath = "//*[@data-testid='itemDescription'][contains(text(),'"+ProdName +"')]//following::input[contains(@value,'Add to Cart')]";					
 				driver.findElement(By.xpath(AddtoCartXpath)).click();
-				System.out.println("\"Add the last of found items to cart\" step is successfull");
+				System.out.println("Step 4: \"Add the last of found items to cart\" step is successfull\n");
 				setproductTitle(ProdName);
 				break;
 				
 			}catch(Exception e) {
-				System.out.println("Warning: Item is not available for \"Add to Cart\", Checking previous Item");
+				System.out.println(ANSI_YELLOW+"Step 4: Warning: Item is not available for \"Add to Cart\", Checking previous Item \n"+ANSI_RESET);
 			}
 			
 		}
 				
 		waitforElementtodisplay(By.cssSelector(".notification__action"));		
 		
-		//Navigating to cart
+		//Method to check Navigating to cart is successful or not
 		try {
 			PopupViewCart.click();
-			System.out.println("View Cart Click Successfull");
+			System.out.println("View Cart Click Successfull \n");
 		}catch(Exception e) {
 			MainViewCart.click();
-			System.out.println("View Cart Click Successfull");
+			System.out.println("View Cart Click Successfull \n");
 		}		
 		productListSize=0;
 	}

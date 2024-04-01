@@ -10,7 +10,7 @@ import webstaurantstore.Utilities.AbstractComponent;
 
 public class CartPage extends AbstractComponent{
 	WebDriver driver;
-	
+	//Constructor
 	public CartPage(WebDriver driver)
 	{
 		super(driver);
@@ -19,28 +19,22 @@ public class CartPage extends AbstractComponent{
 		PageFactory.initElements(driver,this);
 			
 	}
-	LandingPage nobj = new LandingPage(driver);
+	//Instantiating the LandingPage class object
+	LandingPage nobj = new LandingPage(driver);	
 	
-	
+	//Creating Web elements
 	@FindBy(xpath="//span[@class='itemDescription description overflow-visible']/a")
-	 WebElement CartItemname;
-	
+	 WebElement CartItemname;	
 	@FindBy(id="react_0HN2F3HQ1I9CD")
-	 WebElement CartHeader;
-	
+	 WebElement CartHeader;	
 	@FindBy(xpath="//button[contains(text(),'Empty Cart')]")
-	 WebElement EmptyCartButoon;
-	
+	 WebElement EmptyCartButoon;	
 	@FindBy(xpath="//footer[@data-testid='modal-footer']/button[contains(text(),'Empty')]")
-	 WebElement EmptyCartOKButoon;
-	
+	 WebElement EmptyCartOKButoon;	
 	@FindBy(xpath="//*[@id='cartItemCountSpan']")
 	 WebElement CartCount;
 	
-	
-	
-	
-	
+	//Method to check if the item added to cart ornot
 	public boolean ItemAddCheck(String ProductTitle) {
 		//String ProductTitle = nobj.getproductTitle();		
 		String cartitemName = CartItemname.getAttribute("title").toString();
@@ -51,7 +45,7 @@ public class CartPage extends AbstractComponent{
 			return false;
 		}	
 	}
-	
+	//Method to check whether the Cart is empty or not
 	public void emptycart() {
 		waitforElementtodisplay(By.xpath("//button[contains(text(),'Empty Cart')]"));		
 		try {			
@@ -60,17 +54,17 @@ public class CartPage extends AbstractComponent{
 			EmptyCartOKButoon.click();
 			
 		}catch(Exception e) {
-			System.out.println("Exception in clearing the Cart " + e);
+			System.out.println("Step 5: Exception in clearing the Cart \n" + e);
 		}		
 		waitforElementtodisplay(By.cssSelector(".empty-cart__text"));					
 	}
-	
+	//Method to check the count is 0 or not
 	public void cartcountcheck()
 	{
 		//checking for empty cart
 				String itemcount = CartCount.getText();
 				Assert.assertEquals(itemcount,"0");	
-				System.out.println("\"Empty cart\" step is successfull");
+				System.out.println("Step 5: \"Empty cart\" step is successfull \n");
 	}	
 	
 	
